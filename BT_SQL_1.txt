@@ -1,0 +1,393 @@
+CREATE TABLE users(
+  id INT PRIMARY KEY AUTO_INCREMENT, 
+  username VARCHAR
+(255),
+  created_at DATE
+);
+
+INSERT INTO
+  users
+  (`username`, `created_at
+
+`)
+VALUES
+('user_1', '2010-03-30');
+
+INSERT INTO
+  users
+  (`username`, `created_at
+
+`)
+VALUES
+('user_2', '2011-03-30');
+
+INSERT INTO
+  users
+  (`username`, `created_at
+
+`)
+VALUES
+('user_3', '2012-03-30');
+
+INSERT INTO
+  users
+  (`username`, `created_at
+
+`)
+VALUES
+('user_4', '2013-03-30');
+
+INSERT INTO
+  users
+  (`username`, `created_at
+
+`)
+VALUES
+('user_5', '2013-03-29');
+
+INSERT INTO
+  users
+  (`username`, `created_at
+
+`)
+VALUES
+('user_6', '2013-03-30');
+
+CREATE TABLE photos(
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  image_url VARCHAR
+(255),
+  user_id INT,
+  FOREIGN KEY
+(user_id) REFERENCES users
+(id),
+  created_at DATE
+);
+
+INSERT INTO
+  photos
+  (image_url, user_id, created_at)
+VALUES
+  ('img_1', 1, '2010-03-30');
+
+INSERT INTO
+  photos
+  (image_url, user_id, created_at)
+VALUES
+  ('img_2', 1, '2010-03-30');
+
+INSERT INTO
+  photos
+  (image_url, user_id, created_at)
+VALUES
+  ('img_3', 2, '2012-03-30');
+
+INSERT INTO
+  photos
+  (image_url, user_id, created_at)
+VALUES
+  ('img_4', 2, '2012-03-30');
+
+INSERT INTO
+  photos
+  (image_url, user_id, created_at)
+VALUES
+  ('img_5', 3, '2015-03-30');
+
+INSERT INTO
+  photos
+  (image_url, user_id, created_at)
+VALUES
+  ('img_6', 4, '2016-03-30');
+
+CREATE TABLE comments(
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  comment_text VARCHAR
+(2047),
+  user_id INT,
+  photo_id INT,
+  FOREIGN KEY
+(user_id) REFERENCES users
+(id),
+  FOREIGN KEY
+(photo_id) REFERENCES photos
+(id),
+  created_at DATE
+);
+
+INSERT INTO
+  comments
+VALUES
+  (0, 'comment_1', 1, 1, '2010-03-30');
+
+INSERT INTO
+  comments
+VALUES
+  (0, 'comment_2', 1, 1, '2010-03-30');
+
+INSERT INTO
+  comments
+VALUES
+  (0, 'comment_3', 1, 2, '2010-03-30');
+
+INSERT INTO
+  comments
+VALUES
+  (0, 'comment_4', 2, 2, '2013-03-30');
+
+CREATE TABLE likes
+(
+  photo_id INT,
+  user_id INT,
+  PRIMARY KEY (user_id, photo_id),
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (photo_id) REFERENCES photos(id),
+  created_at DATE
+);
+
+INSERT INTO
+  likes
+VALUES
+  (1, 2, '2013-03-30');
+
+INSERT INTO
+  likes
+VALUES
+  (1, 3, '2012-04-30');
+
+INSERT INTO
+  likes
+VALUES
+  (2, 3, '2012-04-30');
+
+INSERT INTO
+  likes
+VALUES
+  (3, 3, '2012-04-30');
+
+INSERT INTO
+  likes
+VALUES
+  (1, 4, '2015-04-30');
+
+CREATE TABLE tags(
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  tag_name VARCHAR
+(255),
+  created_at DATE
+);
+
+INSERT INTO
+  tags
+VALUES
+  (0, 'tag_1', '2017-03-30');
+
+INSERT INTO
+  tags
+VALUES
+  (0, 'tag_2', '2017-03-30');
+
+INSERT INTO
+  tags
+VALUES
+  (0, 'tag_3', '2017-03-30');
+
+INSERT INTO
+  tags
+VALUES
+  (0, 'tag_4', '2018-03-30');
+
+CREATE TABLE photo_tags
+(
+  photo_id INT,
+  tag_id INT,
+  PRIMARY KEY (photo_id, tag_id),
+  FOREIGN KEY (photo_id) REFERENCES photos(id),
+  FOREIGN KEY (tag_id) REFERENCES tags(id)
+);
+
+INSERT INTO
+  photo_tags
+VALUES
+  (1, 1);
+
+INSERT INTO
+  photo_tags
+VALUES
+  (1, 2);
+
+INSERT INTO
+  photo_tags
+VALUES
+  (2, 3);
+
+INSERT INTO
+  photo_tags
+VALUES
+  (3, 3);
+
+INSERT INTO
+  photo_tags
+VALUES
+  (4, 1);
+
+CREATE TABLE follows
+(
+  follower_id INT,
+  followee_id INT,
+  PRIMARY KEY (followee_id, follower_id),
+  created_at DATE
+);
+
+INSERT INTO
+  follows
+VALUES
+  (1, 2, '2012-03-30');
+
+INSERT INTO
+  follows
+VALUES
+  (1, 3, '2014-03-30');
+
+INSERT INTO
+  follows
+VALUES
+  (1, 4, '2015-03-30');
+
+INSERT INTO
+  follows
+VALUES
+  (2, 1, '2012-03-30');
+
+INSERT INTO
+  follows
+VALUES
+  (2, 3, '2014-03-30');
+
+INSERT INTO
+  follows
+VALUES
+  (2, 4, '2015-03-30');
+
+INSERT INTO
+  follows
+VALUES
+  (3, 1, '2012-03-30');
+
+INSERT INTO
+  follows
+VALUES
+  (3, 2, '2014-03-30');
+
+INSERT INTO
+  follows
+VALUES
+  (4, 1, '2015-03-30');
+
+INSERT INTO
+  follows
+VALUES
+  (4, 2, '2015-03-30');
+
+-- FIND YEAR OF THE EARLIEST USER
+SELECT
+  YEAR(created_at) AS "Earlist year"
+FROM
+  users
+ORDER BY
+  created_at
+LIMIT
+  1;
+
+-- FIND 2 WEEKDAYs WITH THE MOST REGISTRATIONs
+SELECT
+  WEEKDAY
+(created_at) AS "Week day",
+  COUNT
+(WEEKDAY
+(created_at)) AS "#Registrations"
+FROM
+  users
+GROUP BY
+  WEEKDAY
+(created_at)
+ORDER BY
+  COUNT
+(WEEKDAY
+(created_at)) DESC
+LIMIT
+  2;
+
+-- FIND USERS HASN'T POSTED ANY PICTURE
+SELECT
+  users.id,
+  users.username,
+  users.created_at
+FROM
+  users
+  LEFT JOIN photos ON users.id = photos.user_id
+WHERE
+  photos.id IS NULL;
+
+-- FIND MOST LIKED IMAGE & A ITS OWNER
+SELECT
+  *
+FROM
+  photos
+  JOIN (
+    SELECT
+    photo_id AS MostLikedImageID,
+    COUNT(photo_id) AS NumLikes
+  FROM
+    likes
+  GROUP BY
+      photo_id
+  ORDER BY
+      COUNT(photo_id) DESC
+    LIMIT
+      1
+  ) AS sub ON photos.id = sub.MostLikedImageID 
+;
+
+-- FIND AVERAGE NUMBER OF PICTUREs POSTED PER ACTIVE USERS (HAVE POSTED PCITURES)
+SELECT
+  COUNT(*) as photo_number,
+  COUNT(DISTINCT(user_id)) as user_number,
+  COUNT(*) / COUNT(DISTINCT(user_id)) as average
+FROM
+  photos
+-- FIND USERS WITH MOST PHOTO_TAGS
+SELECT
+  user_id,
+  SUM(num_photo_tags) as total_tags
+FROM
+  photos
+  JOIN (
+    SELECT
+    photo_id,
+    COUNT(*) as num_photo_tags
+  FROM
+    photo_tags
+  GROUP BY
+      photo_id
+  ) AS sub ON photos.id = sub.photo_id
+GROUP BY
+  user_id
+LIMIT
+  1;
+
+-- FIND USERS WHO LIKED ONLY 1 PICTURE
+SELECT
+  *
+FROM
+  (
+    SELECT
+    user_id,
+    COUNT(user_id) as num_likes
+  FROM
+    likes
+  GROUP BY
+      user_id
+  ) AS sub
+WHERE
+  sub.num_likes = 1;
